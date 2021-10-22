@@ -1,0 +1,133 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+/*IMAGEN CONF BS AS*/
+.carousel-content {
+  position: absolute;
+  bottom: 10%;
+  left: 40%;
+  z-index: 20;
+  color: white;  
+  font-family: 'Roboto', sans-serif;
+  font-size: 20px;
+}
+
+.img-ba{ 
+  background-size: cover;    
+  background-position: center;  
+  min-width: max-content;       
+  background-color: rgba(0, 0, 0, 0);
+  color: #26262609 ;
+  filter: brightness(50%);
+}
+
+#div_img-BSAS {
+  height: 500px;  
+}
+
+/*TARJETAS*/
+.txt-titlecards{
+  font-size: 10px;
+  padding-top: 10px;
+  font-family: 'Roboto', sans-serif;
+}
+
+.txt-cards span{
+  font-size: 10px;  
+  font-family: 'Roboto', sans-serif;
+}
+
+.txt-cards p{
+  font-size: 10px;  
+  font-family: 'Roboto', sans-serif;
+}
+
+/*IMAGEN DIVIDA CON TEXTO*/
+.txt-BsAs{
+  font-size: 10px ;
+}
+/*TEXTO FORM*/
+.txt-form1{
+  font-size: 10px ;
+}
+
+.txt-form2{
+  font-size: 20px ;
+}
+
+.txt-form3{
+  font-size: 12px ;
+}
+
+.place{
+  font-size: 12px !important;
+}
+
+.btn-enviar{
+  background-color: rgb(115, 204, 63) !important;
+  border-color: rgb(115, 204, 63) !important;
+}
+/*FOOTER*/
+.footer{
+  background-color: #1d5271;  
+}
+
+.footer-txt{
+  font-size: 12px;
+}
+
+/*RESPONSIVE*/
+@media screen and (max-width: 768px) {
+  
+  /*BS AS*/
+  .BsAs-title h1, p{
+    font-size: 0.8rem; 
+  }
+
+  /*IMAGEN DIVIDIDA*/  
+  .img-dividida img{    
+    height: 100%;
+  }
+  .txt-dividida{
+    font-size: 0.5rem;
+  }
+  h2{
+    font-size: 0.5rem;
+  }
+  .img-dividida button{
+    font-size: 0.5rem;
+  }
+
+  /*FOOTER*/
+  .footer-txt div{
+    width:10%;
+    font-size: 0.5rem;  
+    display: inline-flex; 
+    justify-content: center;  
+  }
+}
+
+
+@media screen and (max-width: 900px) {
+ 
+  /*IMAGEN DIVIDIDA*/  
+  .img-dividida img{    
+    height: 100%;
+  }
+  .txt-dividida{
+    font-size: 0.8rem;
+  }
+  h2{
+    font-size: 0.8rem;
+  }
+  .img-dividida button{
+    font-size: 0.8rem;
+  }
+
+    /*FOOTER*/
+    .footer-txt div{
+      width:10%;
+      font-size: 0.5rem;  
+      display: inline-flex; 
+      justify-content: center;  
+    }
+}
