@@ -1,1 +1,269 @@
 
+<?php include 'conexion.php'; ?>	
+<?php include 'header_admin.php'; ?>	
+
+<?php 
+ #si hay envio de datos, los inserto en la base de datos 
+ if($_POST){
+
+    $operacion = $_POST['operacion'];
+    $tipo_propiedad = $_POST['tipo_propiedad']; 
+    $titulo = $_POST['titulo'];              
+    #nombre de la imagen
+    $imagen = $_FILES['archivo']['name'];
+    #tenemos que guardar la imagen en una carpeta 
+    $imagen_temporal=$_FILES['archivo']['tmp_name'];
+    #creamos una variable fecha para concatenar al nombre de la imagen, para que cada imagen sea distinta y no se pisen 
+    $fecha = new DateTime();
+    $imagen= $fecha->getTimestamp()."_".$imagen;
+    move_uploaded_file($imagen_temporal,"imagenes/".$imagen);
+    $ubicacion = $_POST['ubicacion'];
+    $superficie = $_POST['superficie'];
+    $ambientes = $_POST['ambientes'];
+    $banios = $_POST['banios'];
+    $importe = $_POST['importe'];  
+    $descripcion = $_POST['descripcion'];
+
+    #creo una instancia(objeto) de la clase de conexion
+    #$conexion = new conexion();
+    $conexion = new conexion('localhost','root','','propiedades');
+    $sql="INSERT INTO propiedades (id, operacion, tipo_propiedad, titulo, imagen, ubicacion, superficie, ambientes, banios, importe, descripcion) VALUES (NULL, '$operacion', '$tipo_propiedad', '$titulo', '$imagen', '$ubicacion', '$superficie', '$ambientes', '$banios', '$importe', '$descripcion');";
+    $id_propiedades = $conexion->ejecutar($sql);
+
+    #para que no inserte muchas veces
+    header("location:biblioteca.php");
+ }
+
+ #mostrar datos 
+ #vamos a consultar para llenar la tabla 
+ $conexion = new conexion();# es un objeto de tipo conexion,
+ #$conexion = new conexion('localhost','root','propiedades','');
+ $propiedades= $conexion->consultar("SELECT * FROM propiedades");
+ #comprobamos que la info este en forma de arreglo
+ #print_r($resultado);
+
+?>
+
+<?php include 'header_admin.php'; ?>
+
+    <section data-stellar-background-ratio="0.5">
+		<div id="home" class="position-relative text-center"></div>
+		<div class="position-absolute top-50 start-50 translate-middle h-50">			
+			<h5 class="text-danger fw-light">BIBLIOTECA</h5>					
+		</div> 
+	</section>
+	
+	<div class="container-fluid m-2">
+		<ul class="breadcrumb mb-0 icono-prop">
+			<li class="breadcrumb-item">
+				<a href="index_admin.php"> 
+					<i class="fas fa-home text-danger"></i>
+				</a>
+			</li>
+			<li class="breadcrumb-item">
+				<span><small>Biblioteca</small></span>
+			</li>
+		</ul>
+	</div>		
+
+   <br>
+
+   <div class="row container-fluid m-1 p-1">
+       <!-- SECCION PARA INSERTAR PROPIEDADES -->
+	   <div class="col-md-5 shadow-lg">
+            <div class="card">
+                <div class="card-header label">
+                    <span><b><i class="fas fa-cubes"></i> AGREGAR PROPIEDADES</b></span>
+                </div>
+                <div class="card-body">
+                    <!--para recepcionar archivos uso enctype-->
+                    <form action="biblioteca.php" method="POST" enctype="multipart/form-data">
+                        <div class="row p-2">
+                            <div class="col-md-6">
+                                <label class="label">Tipo de Operación</label>					  	
+                                <select required class="form-select label" aria-label="Default select example" name="operacion" id="operacion">
+                                    <option selected>--</option>                                    
+                                    <option value="Alquiler">Alquiler</option>
+                                    <option value="Venta">Venta</option>                              
+                                </select>
+                            </div>
+                            <div class="col-md-6">   
+                                <label class="label">Tipo de Propiedad</label>
+                                <select required class="form-select label" aria-label="Default select example" name="tipo_propiedad" id="tipo_propiedad">
+                                    <option>--</option>
+                                    <option value="Terreno">Terreno</option>
+                                    <option value="Departamento">Departamento</option>
+                                    <option value="Casa">Casa</option>
+                                    <option value="Local">Local</option>
+                                    <option value="Deposito">Depósito</option>
+                                    <option value="Galpon">Galpón</option>
+                                    <option value="Oficina">Oficina</option>
+                                    <option value="EdificioComercial">Edificio Comercial</option>
+                                    <option value="Otros">Otros</option>
+                                </select>                                                             
+                            </div> 
+                        </div>                       
+                        <div class="row p-2">
+                            <div class=" label">                                                                
+                                <label for="titulo">Titulo</label>
+                                <input required class="form-control" type="text" name="titulo" id="titulo" placeholder="Ingrese un Titulo">
+                            </div>                                                       
+                        </div>
+                        <div class="p-2 label">
+                            <label for="archivo">Imagen de la Propiedad</label>
+                            <input class="form-control" type="file" name ="archivo" id="archivo">
+                        </div> 
+                        <div class="p-2 label">
+                            <label for="ubicacion">Ubicacion</label>                            
+                            <input required class="form-control" type="text" name="ubicacion" id="ubicacion" placeholder="Ingrese Ubicacion">
+                        </div>                          
+                        <div class="row p-2">
+                            <div class="col-md-3 label">                                                                
+                                <label for="superficie"><i class="fas fa-home"></i> Superficie</label>
+                                <input required class="form-control" type="text" name="superficie" id="superficie" placeholder="mts2">
+                            </div>
+                            <div class="col-md-3 label">  
+                                <label><i class="fas fa-bed"></i> Ambientes</label>
+                                <select required class="form-select label" aria-label="Default select example" name="ambientes" id="ambientes">
+                                    <option selected> --</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>                                                                                                            
+                                </select>                                                                                              
+                            </div>                            
+                            <div class="col-md-3 label">
+                                <label><i class="fas fa-bath"></i> Baños</label>
+                                <select required class="form-select label" aria-label="Default select example" name="banios" id="banios">
+                                    <option selected> --</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>                                                                                                            
+                                </select>                                                                                                      
+                            </div>
+                            <div class="col-md-3 label">
+                                <label for="importe">Importe</label>
+                                <input required class="form-control" type="text" name="importe" id="importe" placeholder="$">
+                            </div> 
+                        </div>                    
+                        <div class="p-2 label">
+                            <label for="descripcion">Indique alguna descripción de la Propiedad</label>
+                            <textarea required class="form-control" name="descripcion" id="descripcion" cols="30" rows="4"></textarea>
+                        </div>
+                        <div class="p-2 text-center">                        
+                            <input class="btn btn-outline-success" type="submit" value="Enviar">
+                        </div>
+                    </form>
+                </div> <!--cierra el body-->
+            </div><!--cierra el card-->            
+        </div><!--cierra el col--> 
+
+		<!-- SECCION PARA ELIMINAR Y MODIFICAR PROPIEDADES -->
+        <div class="col-md-7 shadow-lg">
+            <div class="card">            
+                <div class="card-header label">
+                    <span><b><i class="fas fa-cubes"></i> EDICIÓN</b></span>
+                </div>                
+                <div class="table-responsive card-body">
+                
+                    <table class="table table-striped table-sm"> <!--table-sm; cellspacing="0"; width="100%"-->                    
+                        <thead>
+                            <tr class="text-center">
+                                <th>Acción</th>
+                                <th>#</th>
+                                <th>Operación</th>                        
+                                <th>Propiedad</th>     
+                                <th>Titulo</th>                            
+                                <th>Imagen</th>   
+                                <th>Ubicacion</th>
+                                <th>Superficie</th>
+                                <th>Ambientes</th>                                
+                                <th>Baños</th>
+                                <th>Importe</th>
+                                <th>Descripcion</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php #leemos propiedades 1 por 1
+                            foreach($propiedades as $propiedad){ ?>
+                        
+                            <tr class="text-center">
+                                <td class="d-flex py-3">
+                                    <!-- <a name="borrar" id="borrar" type="button" class="btn btn-outline-danger m-1" href="index.php" onclick="confirmation(?php echo $propiedades['id'];?>)"><i class="far fa-trash-alt"></i></a> -->
+                                    <button type="button" class="btn btn-outline-success editbtn me-1" data-bs-toggle="modal" data-bs-target="#editar"><i class="far fa-edit"></i></button>
+                                    <button type="button" class="btn btn-outline-danger deletebtn" data-bs-toggle="modal" data-bs-target="#eliminar"><i class="far fa-trash-alt"></i></button>
+                                </td>   
+                                <td scope="row"><?php echo $propiedad['id'];?></td>
+                                <td><?php echo $propiedad['operacion'];?></td>
+                                <td><?php echo $propiedad['tipo_propiedad'];?></td>      
+                                <td><?php echo $propiedad['titulo'];?></td>                     
+                                <td> <img width="100" src="imagenes/<?php echo $propiedad['imagen'];?>" alt="">  </td>
+                                <td><?php echo $propiedad['ubicacion'];?></td>
+                                <td><?php echo $propiedad['superficie'];?></td>
+                                <td><?php echo $propiedad['ambientes'];?></td>
+                                <td><?php echo $propiedad['banios'];?></td>
+                                <td><?php echo $propiedad['importe'];?></td>
+                                <td><?php echo $propiedad['descripcion'];?></td>                                                                                 
+                            </tr>                    
+                            
+							<!--Ventana Modal para la Alerta de Insertar
+                            ?php include('modalInsert.php'); ?>
+                            -->																				
+                            <?php #cerramos la llave del foreach
+                            } ?>    
+                                            
+                        </tbody>                                        
+                    </table>                                                               
+                </div><!--cierra el col-->  
+
+                	<!--Ventana Modal para Actualizar--->
+					<?php  include('modalEdit.php'); ?>
+
+                    <!--Ventana Modal para la Alerta de Eliminar--->
+                    <?php include('modalEliminar.php'); ?>
+            </div>
+        </div> <!-- CIERRA: Seccion para eliminar y modificar propiedades --> 
+   </div>
+   
+<script>
+	$('.editbtn').on('click',function(){
+		$tr=$(this).closest('tr');
+		var datos=$tr.children("td").map(function () {
+            return $(this).text();
+        });
+        $('#update_id').val(datos[0]);
+        $('#operation').val(datos[1]);
+        $('#tipoprop').val(datos[2]);
+        $('#title').val(datos[3]);
+        $('#image').val(datos[4]);
+        $('#place').val(datos[5]);
+        $('#sup').val(datos[6]);
+        $('#amb').val(datos[7]);
+        $('#banio').val(datos[8]);
+        $('#precio').val(datos[9]);
+        $('#desc').val(datos[10]);
+	});
+</script>
+
+
+<script>
+	$('.deletebtn').on('click',function(){
+		$tr=$(this).closest('tr');
+		var datos=$tr.children("td").map(function () {
+            return $(this).text();
+        });
+        $('#delete_id').val(datos[0]);       
+	});
+</script>
+    
+    <?php include 'script.php'; ?>
+
+  </body>
+</html>	        
+  
